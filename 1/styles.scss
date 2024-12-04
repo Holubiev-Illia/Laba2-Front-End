@@ -1,0 +1,311 @@
+@use "sass:map";
+
+// Variables
+$colors: (
+  primary: #1b3a4b,
+  secondary: #2c5364,
+  hover: #3c7a89,
+  hover-dark: #4c8d9d,
+  text-light: #e0e7e9,
+  text-dark: #2c3e50,
+  background: #f8f9fa,
+  white: #fff,
+  border: #e0e7e9,
+);
+
+$breakpoints: (
+  mobile: 600px,
+  tablet: 900px,
+  desktop: 1200px,
+);
+
+$box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+$transition: all 0.3s ease;
+
+// Mixins
+@mixin flex($direction: row, $justify: center, $align: center, $gap: 0) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  @if $gap > 0 {
+    gap: $gap;
+  }
+}
+
+@mixin responsive($breakpoint) {
+  @media (max-width: map.get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}
+
+// Base Styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Georgia", serif;
+  background-color: map.get($colors, background);
+  color: map.get($colors, text-dark);
+  line-height: 1.6;
+}
+
+// Header
+header {
+  background-color: map.get($colors, primary);
+  padding: 1.5rem;
+  @include flex(row, space-between, center);
+  box-shadow: $box-shadow;
+
+  .logo {
+    color: map.get($colors, text-light);
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+  }
+
+  .search-bar {
+    padding: 0.75rem;
+    border: none;
+    border-radius: 4px;
+    width: 300px;
+    background-color: map.get($colors, text-light);
+    font-size: 1rem;
+  }
+}
+
+// Navigation
+.main-nav {
+  background-color: map.get($colors, secondary);
+  padding: 1rem;
+
+  .nav-list {
+    @include flex(row, center, center, 2rem);
+    list-style: none;
+
+    a {
+      color: map.get($colors, text-light);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      transition: $transition;
+      font-size: 1.1rem;
+
+      &:hover {
+        background-color: map.get($colors, hover);
+        border-radius: 4px;
+      }
+    }
+  }
+}
+
+// Container Layout
+.container {
+  display: grid;
+  grid-template-columns: 250px 1fr 250px;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+// Sidebar
+.sidebar {
+  background-color: map.get($colors, secondary);
+  padding: 1.5rem;
+  border-radius: 8px;
+  height: fit-content;
+
+  ul {
+    list-style: none;
+  }
+
+  li {
+    margin: 1rem 0;
+  }
+
+  a {
+    color: map.get($colors, text-light);
+    text-decoration: none;
+    transition: color 0.3s;
+    font-size: 1.1rem;
+
+    &:hover {
+      color: map.get($colors, border);
+    }
+  }
+}
+
+// Main Content
+.main-content {
+  @include flex(column, flex-start, stretch, 2rem);
+}
+
+%card-base {
+  background-color: map.get($colors, white);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: $box-shadow;
+}
+
+.featured-work,
+.bottom-feature {
+  @extend %card-base;
+}
+
+.artwork {
+  &-image {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: auto;
+      transition: $transition;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  &-description {
+    padding: 1.5rem;
+
+    h2 {
+      color: map.get($colors, primary);
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+.article-section {
+  @extend %card-base;
+  padding: 2rem;
+
+  h2 {
+    color: map.get($colors, primary);
+    margin-bottom: 1rem;
+  }
+}
+
+// Trending Section
+.trending {
+  background-color: map.get($colors, secondary);
+  padding: 1.5rem;
+  border-radius: 8px;
+  height: fit-content;
+
+  h3 {
+    color: map.get($colors, text-light);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+  }
+
+  &-list {
+    list-style: none;
+
+    li {
+      margin: 1rem 0;
+      padding: 1rem;
+      background-color: map.get($colors, hover);
+      border-radius: 4px;
+      color: map.get($colors, text-light);
+      transition: $transition;
+      cursor: pointer;
+
+      &:hover {
+        background-color: map.get($colors, hover-dark);
+      }
+    }
+  }
+}
+
+// Responsive Design
+@include responsive(desktop) {
+  .container {
+    grid-template-columns: 200px 1fr 200px;
+    gap: 1rem;
+    padding: 1rem;
+  }
+}
+
+@include responsive(tablet) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    margin-bottom: 2rem;
+
+    ul {
+      @include flex(row, flex-start, center, 1rem);
+      flex-wrap: wrap;
+      padding: 0.5rem;
+    }
+
+    li {
+      margin: 0;
+    }
+
+    a {
+      display: block;
+      padding: 0.5rem 1rem;
+      background-color: map.get($colors, hover);
+      border-radius: 4px;
+      font-size: 0.9rem;
+
+      &:hover {
+        background-color: map.get($colors, hover-dark);
+      }
+    }
+  }
+
+  .trending {
+    margin-top: 2rem;
+
+    &-list {
+      @include flex(row, flex-start, center, 1rem);
+      flex-wrap: wrap;
+
+      li {
+        margin: 0;
+        flex: 1 1 calc(50% - 0.5rem);
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+@include responsive(mobile) {
+  .nav-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .search-bar {
+    width: 200px;
+  }
+
+  .sidebar a {
+    font-size: 0.8rem;
+    text-align: center;
+    width: 100%;
+  }
+
+  .trending-list li {
+    flex: 1 1 100%;
+  }
+
+  .artwork-description {
+    padding: 1rem;
+  }
+}
